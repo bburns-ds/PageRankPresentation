@@ -1,0 +1,109 @@
+\documentclass{beamer}
+
+\title{PageRank}
+\author{Ben Burns, Dan Magazu, Lucas Chagas, \\Thomas Webster, Trung Do}
+\institute{MATH 455}
+\date{Fall 2021}
+
+\usepackage{outlines}
+\usepackage{graphicx}
+\graphicspath{{./images}}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}[t]
+\frametitle{Formalizing the PageRank problem}
+\begin{outline}
+    \1 We're going to construct a directed graph $G = (V, E)$
+    \1 For each website we consider, we construct a node $v_i \in V$
+    \1 For two distinct nodes $v_i,\ v_j \in V$, the \emph{directed} edge $v_iv_j \in E$ iff there is a link on website $i$ that goes to website $j$.
+    \1 If $v_i$ and $v_j$ are not distinct (a website is linking to itself), we ignore the link and do not construct a loop edge.
+        \2 $G$ is not a psuedograph
+    \1 Multiple hyperlinks on page $i$ to page $j$ are all represented by the single, directed edge 
+        \2 $G$ is not a multigraph.
+\end{outline}
+\end{frame}
+
+\begin{frame}
+\frametitle{Visual Representation}
+\begin{center}
+    \includegraphics[width=0.6\textwidth]{unweighted.png}
+\end{center}
+\begin{outline}
+    \1 We have a set of 4 websites
+    \1 Each edge represents a hyperlink from the origin node to the destinationx node 
+\end{outline}
+\end{frame}
+
+\begin{frame}
+\frametitle{Adjacency Matrix}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{unweighted.png}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \centering
+        {\Large$A = \begin{pmatrix}
+            0 & 1 & 1 & 1\\
+            0 & 0 & 1 & 1\\
+            1 & 0 & 0 & 0\\
+            1 & 0 & 1 & 0\\
+        \end{pmatrix}$}
+    \end{column}
+\end{columns}
+\begin{outline}
+    \1 No self loops means the main diagonal is all zeros
+\end{outline}
+\end{frame}
+\begin{frame}[t]
+\frametitle{Applying PageRank Values and Edge Weights}
+\begin{outline}
+    \1 At first, we assign 
+    \1 For each \emph{vertex} $v_i$, we assign some PageRank value $PR(v_i)$    
+        \2 TODO: How to calculate?
+    \1 Consider the set of vertices that $v_i$ has an edge to 
+        \2 $V_i = \{v_j | v_iv_j \in E\}$
+    \1 For each vertex in the set, the weight of the edge to that vertex will be the PageRank value of the source node divided by the number of outbound edges it has
+        \2 $\forall v_j \in V_i: w(v_iv_j) = \dfrac{PR(v_i)}{|V_i|}$
+    \1 In other words, all the outbound edges from a particular vertex will have the same weight
+\end{outline}
+\end{frame}
+
+\begin{frame}
+\frametitle{Visual Representation}
+\begin{center}
+    \includegraphics[width=0.6\textwidth]{weighted.png}
+\end{center}
+\begin{outline}
+    \1 In this case, all nodes have a PageRank value of 1.
+\end{outline}
+\end{frame}
+
+\begin{frame}
+\frametitle{Transition Matrix}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{weighted.png}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \centering
+        $T = \begin{pmatrix}
+            0 & 1/3 & 1/3 & 1/3\\
+            0 & 0 & 1/2 & 1/2\\
+            1 & 0 & 0 & 0\\
+            1/2 & 0 & 1/2 & 0\\
+        \end{pmatrix}$
+    \end{column}
+\end{columns}
+\begin{outline}
+    \1 All entries of the transition matrix are non-negative
+    \1 If $v_i$ has at least one outgoing edge, the sum of the entries in row $i$ is 1
+        \2 Else, the sum is 0.
+    \1 This is a \emph{column stochastic matrix}
+\end{outline}
+\end{frame}
+
+\end{document}
