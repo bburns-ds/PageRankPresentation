@@ -8,6 +8,13 @@
 \usepackage{graphicx}
 \graphicspath{{./images}}
 
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+}
+
 \begin{document}
 
 \frame{\titlepage}
@@ -54,9 +61,17 @@
     \1 Running our basic search engine gives us a collection of pages with information relevant to our query
     \1 Assumption: More "important" and useful websites will be the ones with proportionally more inbound links
     \1 Pages with very reliable, primary information are likely to be cited by lots of website authors, and therefore will have lots of "flow" into them
-    \1 If what you're looking for is very niche and therefore won't have many inbound links, the best results will still have proprotionally more citations than other relevant sources
-%    \1 You can still find it by making your query more specific so that it doesn't match the more important/more general information
-    \1 Searching "PageRank" will likely get you Wikipedia, but "Anatomy of PageRank architecture" gives you the original research literature. Your returned urls are still proportionally important results, your query just filtered out the numerically more "important", yet less relevant pages.
+%    \1 If what you're looking for is very niche and therefore won't have many inbound links, the best results will still have proprotionally more citations than other relevant sources
+\end{outline}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{Finding Less Important Information}
+\begin{outline}
+    \1 A worry you may have is that we'll only find pages with lots of inbound links
+    \1 You can still find niche information by making your query more specific so that it won't match more general pages
+    \1 Searching "PageRank" will likely get you Wikipedia, but "Anatomy of PageRank architecture" gives you the original research literature. 
+    \1 Your returned urls are still proportionally important results, your query just filtered out the numerically more "important", yet less relevant pages.
 \end{outline}
 \end{frame}
 
@@ -113,9 +128,11 @@
         \2 All vertices have equal weight, and our weights sum up to 1
     \1 Consider the set of vertices that $v_i$ has an edge to 
         \2 $V_i = \{v_j | v_iv_j \in E\}$
-    \1 For each vertex in the set, the weight of the edge to that vertex will be the PageRank value of the source node divided by the number of outbound edges it has
-        \2 $\forall v_j \in V_i: w(v_iv_j) = \dfrac{PR(v_i)}{|V_i|}$
-    \1 In other words, all the outbound edges from a particular vertex will have the same weight
+    \1 For vertex 1, $V_1 = \{2, 3, 4\}$. In other words, a user on page 1 can choose to click a link to traverse to either 2, 3, or 4.
+    \1 
+%    \1 For each vertex in the set, the weight of the edge to that vertex will be the PageRank value of the source node divided by the number of outbound edges it has
+%        \2 $\forall v_j \in V_i: w(v_iv_j) = \dfrac{PR(v_i)}{|V_i|}$
+%    \1 In other words, all the outbound edges from a particular vertex will have the same weight
 \end{outline}
 \end{frame}
 
@@ -150,7 +167,7 @@
     \1 All entries of the transition matrix are non-negative
     \1 If $v_i$ has at least one outgoing edge, the sum of the entries in row $i$ is 1
         \2 Else, the sum is 0.
-    \1 This is a \emph{column stochastic matrix}
+    \1 This is a \emph{row stochastic matrix}
 \end{outline}
 \end{frame}
 
