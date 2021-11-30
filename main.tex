@@ -25,6 +25,21 @@
 \end{frame}
 
 \begin{frame}[t]
+\frametitle{PageRank}
+\begin{outline}
+    \1 Invented by Sergey Brin and Larry Page (1998)\footnotemark 
+        \2 Publication marks them becoming co-founders of Google  
+    \1 Idea: we want some way to numerically score each webpage based on how "important" it is
+    \1 Algorithm scores each page based on 
+        \2 How many other pages link to it
+        \2 The importance of each of its citations 
+    \1 We can then numerically order pages to rank them (their "PageRank")
+    \1 PageRank: the procedure for scoring each website
+    \1 Google: the database that indexes the PageRank of each website for use
+\end{outline}
+\footnotetext[1]{Many use the year of the original manuscript, 1996}
+\end{frame}
+\begin{frame}[t]
 \frametitle{Formalizing the PageRank problem}
 \begin{outline}
     \1 We're going to construct a directed graph $G = (V, E)$
