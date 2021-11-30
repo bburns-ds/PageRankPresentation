@@ -15,12 +15,12 @@
 \frametitle{Motivation}
 \begin{itemize}
     \setlength\itemsep{0.5em}
-    \item Problem: the internet has a lot of information. 
-    \item A lot of the information out there either isn't relevant to us, or is incorrect.
+    \item Problem: the internet has a \emph{lot} of web pages
+    \item A lot of the information out there either isn't relevant to us, or is inaccurate
     \item Motivation: we want a program that, when provided a phrase, returns webpages with information relevant to the input
-    \item Intuitive solution: return back websites that contain that phrase in content of the pages
-    \item This helps us find more \emph{relevant} pages, but we can't know of we're getting the best information, much less accurate information, without manually going through each result
-    \item Want a stronger solution
+    \item Intuitive solution: return back websites that either contain that phrase, or contain similar phrases
+    \item This helps us find more \emph{relevant} pages, but we can't know if we're getting the best information (much less \emph{accurate} information) without manually going through each result
+    \item We desire a stronger solution
 \end{itemize}
 \end{frame}
 
@@ -30,15 +30,28 @@
     \1 Invented by Sergey Brin and Larry Page (1998)\footnotemark 
         \2 Publication marks them becoming co-founders of Google  
     \1 Idea: we want some way to numerically score each webpage based on how "important" it is
-    \1 Algorithm scores each page based on 
-        \2 How many other pages link to it
-        \2 The importance of each of its citations 
-    \1 We can then numerically order pages to rank them (their "PageRank")
+    \1 Algorithm numerically scores each page $p$ based on 
+        \2 How many other pages link to $p$ (or "cite" it)
+        \2 The "importance" of each of $p$'s citations 
+    \1 We then numerically order pages to rank them
     \1 PageRank: the procedure for scoring each website
-    \1 Google: the database that indexes the PageRank of each website for use
+    \1 Google: the database that indexes the PageRank of each website for search
 \end{outline}
 \footnotetext[1]{Many use the year of the original manuscript, 1996}
 \end{frame}
+
+\begin{frame}[t]
+\frametitle{Underlying Assumption}    
+\begin{outline}
+    \1 Running our basic search engine gives us a collection of pages with information relevant to our query
+    \1 Assumption: More "important" and useful websites will be the ones with proportionally more inbound links
+    \1 Pages with very reliable, primary information are likely to be cited by lots of website authors, and therefore will have lots of "flow" into them
+    \1 If what you're looking for is very niche and therefore won't have many inbound links, the best results will still have proprotionally more citations than other relevant sources
+%    \1 You can still find it by making your query more specific so that it doesn't match the more important/more general information
+    \1 Searching "PageRank" will likely get you Wikipedia, but "Anatomy of PageRank architecture" gives you the original research literature. Your returned urls are still proportionally important results, your query just filtered out the numerically more "important", yet less relevant pages.
+\end{outline}
+\end{frame}
+
 \begin{frame}[t]
 \frametitle{Formalizing the PageRank problem}
 \begin{outline}
@@ -87,9 +100,8 @@
 \begin{frame}[t]
 \frametitle{Applying PageRank Values and Edge Weights}
 \begin{outline}
-    \1 At first, we assign 
-    \1 For each \emph{vertex} $v_i$, we assign some PageRank value $PR(v_i)$    
-        \2 TODO: How to calculate?
+    \1 At first, we assign each vertex with a weight of $\dfrac{1}{|V|}$
+        \2 All vertices have equal weight, and our weights sum up to 1
     \1 Consider the set of vertices that $v_i$ has an edge to 
         \2 $V_i = \{v_j | v_iv_j \in E\}$
     \1 For each vertex in the set, the weight of the edge to that vertex will be the PageRank value of the source node divided by the number of outbound edges it has
