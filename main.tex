@@ -100,9 +100,9 @@
 \end{outline}
 \end{frame}
 
+%\begin{frame}
 %\frametitle{Adjacency Matrix}
 %\begin{columns}
-    %\begin{frame}
 %    \begin{column}{0.5\textwidth}
 %        \centering
 %        \includegraphics[width=\textwidth]{unweighted.png}
@@ -144,17 +144,17 @@
 \begin{itemize}
     \setlength\itemsep{1em}
     \item Assumption: A user on page $i$ user is equally likely to choose to visit each vertex in $V_i$ (our set of vertices that $v_i$ cites)
-    \item From $v_i$, $P(v_j) = \dfrac{1}{|V_i|}$ if $v_j \in V_i$, and 0 else.
     \item In our example from before, the probabilty that our user on page 1 visits page 2 is $P(v_2) = \dfrac{1}{|V_1|} = \dfrac{1}{3}$
     \item So a third of page 1's visitors will "flow" to page 2, a third to page 3, and a third to page 4
+    \item From $v_i$, $P(v_j) = \dfrac{1}{|V_i|}$ if $v_j \in V_i$, and 0 else.
 \end{itemize}
 \end{frame}
 
 \begin{frame}[t]
 \frametitle{Iteration Model}
 \begin{outline}
-    \1 All at once, all users will click one of the links on their curreny page
-    \1 At click 0, the PageRank value of all vertices $PR(v) = \dfrac{1}{|V|}$
+    \1 All at once, all users will click one of the links on their current page
+    \1 At "click 0", the PageRank value of all vertices $PR(v) = \dfrac{1}{|V|}$
     \1 On click 1, each page will equally split its PageRank value among the pages it cites
     \1 Page 1 starts with $PR(v_1) = \dfrac{1}{4}$ at click 0, and contributes $\dfrac{1}{12}$ to each of 2, 3, and 4 on click 1
     \1 Conversely, page 1 will receive nothing from page 2, all of $PR(v_3)$, and half of $PR(v_4)$. So after click 1, $PR(v_1) = 0\cdot PR(v_2) + PR(v_3) + \dfrac{1}{2}PR(v_4) = \dfrac{1}{4} + \dfrac{1}{8} = \dfrac{3}{8}$
@@ -162,7 +162,22 @@
 \end{outline}
 \end{frame}
 
-
+\begin{frame}
+\frametitle{Example iteations}
+\bgroup
+\def\arraystretch{3}
+\begin{tabular}{|c|l|l|l|}
+    \hline
+    Click: & 0 & 1 & 2\\
+    \hline
+    $PR(v_1)$ & $\dfrac{1}{4}$ & & \\
+    $PR(v_2)$ & $\dfrac{1}{4}$ & & \\
+    $PR(v_3)$ & $\dfrac{1}{4}$ & & \\
+    $PR(v_4)$ & $\dfrac{1}{4}$ & & \\
+    \hline
+\end{tabular}
+\egroup
+\end{frame}
 %\begin{frame}
 %\frametitle{Visual Representation}
 %\begin{center}
