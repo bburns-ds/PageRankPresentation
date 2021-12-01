@@ -17,6 +17,13 @@
     \insertframenumber/\inserttotalframenumber
 }
 
+\AtBeginSection[ ]
+{
+\begin{frame}{Outline}
+    \tableofcontents[currentsection]
+\end{frame}
+}
+
 \begin{document}
 
 \frame{\titlepage}
