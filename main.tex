@@ -58,11 +58,13 @@
 \end{frame}
 
 \begin{frame}[t]
-\frametitle{Underlying Assumption}    
+\frametitle{Underlying Assumptions}    
 \begin{outline}
     \1 Running our basic search engine gives us a collection of pages with information relevant to our query
     \1 Assumption: More "important" and useful websites will be the ones with proportionally more inbound links
     \1 Pages with very reliable, primary information are likely to be cited by lots of website authors, and therefore will have lots of "flow" into them
+    \1 Assumption: websites with no outgoing links are treated as linking to every other website
+    \1 Else, these pages would just take in flow without ever redistrubting, and eventually all users get stuck on these pages
 %    \1 If what you're looking for is very niche and therefore won't have many inbound links, the best results will still have proprotionally more citations than other relevant sources
 \end{outline}
 \end{frame}
@@ -194,14 +196,33 @@
 \end{outline}
 \begin{mdframed}[backgroundcolor=blue!20]
     \begin{math}
-        PR(v_i) = \dfrac{1-d}{N} + d(c_1PR(v_1) + c_2PR(v_2) + c_3PR(v_3))
+        PR(v_i) = \dfrac{1-d}{|V|} + d(c_1PR(v_1) + c_2PR(v_2) + c_3PR(v_3))
     \end{math}
 \end{mdframed}
 \begin{outline}
-    \1 $c_n = \dfrac{1}{|V_n|}$ if $i \in V_n$, and 0 else
+    \1 $c_n = \dfrac{1}{|V_n|}$ if $i \in V_n$, and 0 else. 
         \2 If $n$ cites $i$, then $n$ contributes its equally distributed value to $i$. If $n$ doesn't cite $i$, $n$ contributes 0 to $i$.
+    \1 If $|V_j| = 0$, we use $|V|$ (random jump from sinks)
 \end{outline}
 \end{frame}
+
+\begin{frame}
+\frametitle{Iterations w/ Damping}
+\bgroup
+\def\arraystretch{2.5}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    $PR$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\%& 7\\
+    \hline
+    $v_1$ & $\dfrac{1}{4}$ & 0.3562 & 0.4014 & 0.3502 & 0.3720 & 0.3697 & 0.3664\\% & 0.3689\\
+    $v_2$ & $\dfrac{1}{4}$ & 0.1083 & 0.1384 & 0.1512 & 0.1367 & 0.1429 & 0.1422\\% & 0.1413\\
+    $v_3$ & $\dfrac{1}{4}$ & 0.3208 & 0.2757 & 0.2885 & 0.2903 & 0.2864 & 0.2884\\% & 0.2880\\
+    $v_4$ & $\dfrac{1}{4}$ & 0.2146 & 0.1845 & 0.2101 & 0.2010 & 0.2010 & 0.2030\\% & 0.2018\\
+    \hline
+\end{tabular}
+\egroup
+\end{frame}
+
 %\begin{frame}
 %\frametitle{Visual Representation}
 %\begin{center}
