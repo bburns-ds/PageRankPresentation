@@ -112,7 +112,6 @@
     \begin{outline}
         \1 In the underlying assumption, the ranking of website is the relative relationship between all websites. 
         \1 The ranking of a website $w$ can be viewed as the probability that a random surfer opens the browser, starts following links, and ends up in that website $w$.
-        \1 Now we interpret the graph's weighted edge in a probabilistic way
         \1 If the random surfer are currently at node $w_1$, for example, then there is a 1/3 chance he would go to node $w_2$, 1/3 chance he would go to node $w_3$, 1/3 chance he would go to node $w_4$. 
         \1 We can model this surfing process as a random walk on graph. 
     \end{outline}
@@ -210,11 +209,50 @@
 \end{outline}
 \end{frame}
 
-\begin{frame}[t]{Spider Traps and Deadends}
-
+\section{Treating Problematic Edge Cases}
+\begin{frame}[t]{Spider Traps}
+\begin{outline}
+    \1 Our random walker gets stuck in a portion of the graph leading to most of the “importance” to flow into subgraph where the walker is stuck
+    \1 Example: what happens when we run power iteration on this web graph? (notice that the random walker will get stuck on page $m$)
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{spider.png}
+    \end{center}
+\end{outline}
 \end{frame}
 
-\begin{frame}[t]{The solution to the Spider traps}
+\begin{frame}[t]{Spider Trap Continued}
+\begin{outline}
+    \1 Power iteration successfuly converges! So we're done right?
+    \1 Wrong. Page $m$ receives a rank of $r_m = 1$ while the rest of the pages are of no importance
+    \1 From the random walker's perspective this makes sense. But this is not what we want.
+    
+    \begin{center}
+        \includegraphics[width=0.8\textwidth]{spider1b.png}
+    \end{center}
+\end{outline}
+\end{frame}
+\begin{frame}{Another Spider Trap}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \parskip=1em
+        Another example:
+
+    Page a starts with an importance
+    of 1 and passes it page $b$ in the first
+    iteration. Then $b$ passes 1 to $a, \cdots$
+    And this process continues 
+    indefinitely.
+
+    We fail to converge!
+    \parskip=0em
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \includegraphics[width=\textwidth]{spider2a.png}    
+        \includegraphics[width=\textwidth]{spider2b.png}    
+    \end{column}
+\end{columns}
+\end{frame}
+\begin{frame}[t]{The Solution to the Spider Traps}
     \begin{itemize}
         \item At each time step, the random surfer chooses 1 of 2 options:
         \item With some probability $\beta$, the surfer will follow a random link
@@ -223,6 +261,23 @@
     \end{itemize}
 \end{frame}
     
+\begin{frame}[t]{Dead Ends}
+\begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{outline}
+            \1 The random walker encounters a web page without any outbound links leaving them nowhere to go.
+            \1 Example:
+            We converge but power iteration
+            tells us that both page a and b are
+            unimportant!
+        \end{outline}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \includegraphics[width=\textwidth]{deadenda.png}
+        \includegraphics[width=\textwidth]{deadendb.png}
+    \end{column}
+\end{columns}
+\end{frame}
 \begin{frame}[t]{The Solution to Dead Ends}
 \begin{outline}
 \1 Dead end problem: the pages that have zero scores, which leads to their PageRank score not getting distributed to any other page in the graph, not pointing to any other graph
@@ -234,15 +289,25 @@
 \end{outline}
 \end{frame}
     
-\begin{frame}[t]{Why Do Teleports Solve the problem?}
+\begin{frame}[t]{Why Do Teleports Solve the Problem?}
 \begin{outline}
 \1 For any start vector, the power method applied to a Markov transition matrix A will converge to a unique positive stationary vector as long as A is stochastic, irreducible, and aperiodic.
-    \2 Stochastic: Every column in the transition matrix sums to 1
-    \2 Aperiodic: A chain is periodic if there exist k > 1 such that the interval between two visits to some state s is always a multiple of k
-    \2 Irreducible: From any state, there is a non-zero probability of going from any one state to another
 \end{outline}
 \end{frame}
+   
+\begin{frame}[t]{Stocastic}
+    Stochastic: Every column in the transition matrix sums to 1
+\end{frame}
+
+\begin{frame}[t]{Aperiodic}
+    Aperiodic: A chain is periodic if there exist $k > 1$ such that the interval between two visits to some state s is always a multiple of $k$
     
+\end{frame}
+
+\begin{frame}[t]{Irreducible}
+    Irreducible: From any state, there is a non-zero probability of going from any one state to another
+\end{frame}
+
 \begin{frame}[t]{The PageRank equation}
 \begin{outline}
 \1 Google's solution makes the Markov Transition matrix stochastic, aperiodic, and irreducible.
@@ -261,7 +326,7 @@
 \end{outline}
 \end{frame}
 
-
+\section{Google's Implementation}
 \begin{frame}[t]{The Google Matrix}
     \begin{mdframed}[backgroundcolor=blue!20]
         \begin{center}
