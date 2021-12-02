@@ -107,14 +107,76 @@
 %\end{frame}
 
 \begin{frame}[t]{Eigenvector Problem}
+\begin{outline}
+    \1 \textbf{Why eigenvector}: By assumption, the PageRank system is a relative ranking system between all nodes in the graph. 
+    \1 Let us denote the entries of vector $v$, $x_i$, as the ranking score of page $w_i$, $x_i = PR(w_i)$:
+
+    \begin{center}
+        $v = \begin{bmatrix}
+            x_1\\
+            x_2\\
+            x_3\\
+            x_4\\
+        \end{bmatrix}$
+    \end{center}
+\end{outline}
+\end{frame}
+
+\begin{frame}[t]{System of Equations}
+\begin{outline}
+    \1 Analyzing the relationship between 4 nodes in the example, we get the system:
+
+    \begin{center}
+        $\begin{cases}
+            x_1 = 1 \cdot x_3 + \dfrac{1}{2}\cdot x_4&\\[6pt]
+            x_2 = \dfrac{1}{3}\cdot x_1&\\[6pt]
+            x_3 = \dfrac{1}{3}\cdot x_1 + \dfrac{1}{2}\cdot x_2 + \dfrac{1}{2}\cdot x_4&\\[6pt]
+            x_4 = \dfrac{1}{3}\cdot x_1 + \dfrac{1}{2}\cdot x_2&\\[6pt]
+        \end{cases}$
+    \end{center}
+\end{outline}
+\end{frame}
+
+\begin{frame}[t]{Solving for Eigenvector}
+    \begin{outline}
+        \1 Thus we can translate the problem into the eigenvector problem:
+            \2 Find an eigenvector $v$ corresponding to the eigenvalue 1 of the following system:
+
+        \begin{align*}
+                A\cdot \begin{bmatrix}
+                    x_1\\
+                    x_2\\
+                    x_3\\
+                    x_4\\
+                \end{bmatrix} &= \begin{bmatrix}
+                    x_1\\
+                    x_2\\
+                    x_3\\
+                    x_4\\
+                \end{bmatrix}
+        \end{align*}
+    \end{outline}
+\end{frame}
+
+\begin{frame}[t]{Considerations with the Eigenvalue}
+\begin{outline}
+    \1 If we choose to solve by the eigenvector problem, there are a few things to address
+    \1 The conditions to rigorously use the eigenvector method will be defined below. For now, we can solve for the eigenvector corresponding to the eigenvalue 1:
+    \begin{align*}
+        c\cdot \begin{bmatrix}
+            12\\ 4\\ 9\\ 6\\
+        \end{bmatrix}
+    \end{align*}
+    \1 Every vector in the above format is the eigenvector corresponding to eigenvalue 1. 
+    \1 We choose $c$ such that the sum of all entries in this vector equals 1 (we later refer to it as "the probabilistic eigenvector corresponding to the eigenvalue 1")
+\end{outline}
+\end{frame}
+
+\begin{frame}[t]{Power Iteration Method}
 
 \end{frame}
 
 \begin{frame}[t]{Probability Problem}
-
-\end{frame}
-
-\begin{frame}[t]{Power Iteration}
 
 \end{frame}
 
