@@ -75,6 +75,7 @@
 \end{columns}
 \end{frame}
 
+\section{Ways to Solve}
 \begin{frame}[t]{Perspectives for Solving}
     \begin{itemize}
         \setlength\itemsep{1em}
@@ -106,6 +107,39 @@
 %\end{outline}
 %\end{frame}
 
+\subsection{Probability Method}
+\begin{frame}[t]{Probability Problem}
+    \begin{outline}
+        \1 In the underlying assumption, the ranking of website is the relative relationship between all websites. 
+        \1 The ranking of a website $w$ can be viewed as the probability that a random surfer opens the browser, starts following links, and ends up in that website $w$.
+        \1 Now we interpret the graph's weighted edge in a probabilistic way
+        \1 If the random surfer are currently at node $w_1$, for example, then there is a 1/3 chance he would go to node $w_2$, 1/3 chance he would go to node $w_3$, 1/3 chance he would go to node $w_4$. 
+        \1 We can model this surfing process as a random walk on graph. 
+    \end{outline}
+\end{frame}
+
+\begin{frame}[t]{System of Equations}
+    \begin{outline}
+        \1 Analyzing the relationship between 4 nodes in the example, 
+        
+        \begin{center}
+            \includegraphics[width=0.35\textwidth]{unweighted.png}    
+        \end{center}
+
+        we get the system:
+    
+        \begin{center}
+            $\begin{cases}
+                x_1 = 1 \cdot x_3 + \dfrac{1}{2}\cdot x_4&\\[6pt]
+                x_2 = \dfrac{1}{3}\cdot x_1&\\[6pt]
+                x_3 = \dfrac{1}{3}\cdot x_1 + \dfrac{1}{2}\cdot x_2 + \dfrac{1}{2}\cdot x_4&\\[6pt]
+                x_4 = \dfrac{1}{3}\cdot x_1 + \dfrac{1}{2}\cdot x_2&\\[6pt]
+            \end{cases}$
+        \end{center}
+    \end{outline}
+\end{frame}
+
+\subsection{Eigenvector Method}
 \begin{frame}[t]{Eigenvector Problem}
 \begin{outline}
     \1 \textbf{Why eigenvector}: By assumption, the PageRank system is a relative ranking system between all nodes in the graph. 
@@ -119,44 +153,30 @@
             x_4\\
         \end{bmatrix}$
     \end{center}
+    \1 Thus we can translate the problem into the eigenvector problem:
+    \begin{align*}
+        A\cdot \begin{bmatrix}
+            x_1\\
+            x_2\\
+            x_3\\
+            x_4\\
+        \end{bmatrix} &= \begin{bmatrix}
+            x_1\\
+            x_2\\
+            x_3\\
+            x_4\\
+        \end{bmatrix}
+    \end{align*}
 \end{outline}
 \end{frame}
 
-\begin{frame}[t]{System of Equations}
-\begin{outline}
-    \1 Analyzing the relationship between 4 nodes in the example, we get the system:
 
-    \begin{center}
-        $\begin{cases}
-            x_1 = 1 \cdot x_3 + \dfrac{1}{2}\cdot x_4&\\[6pt]
-            x_2 = \dfrac{1}{3}\cdot x_1&\\[6pt]
-            x_3 = \dfrac{1}{3}\cdot x_1 + \dfrac{1}{2}\cdot x_2 + \dfrac{1}{2}\cdot x_4&\\[6pt]
-            x_4 = \dfrac{1}{3}\cdot x_1 + \dfrac{1}{2}\cdot x_2&\\[6pt]
-        \end{cases}$
-    \end{center}
-\end{outline}
-\end{frame}
 
-\begin{frame}[t]{Solving for Eigenvector}
-    \begin{outline}
-        \1 Thus we can translate the problem into the eigenvector problem:
-            \2 Find an eigenvector $v$ corresponding to the eigenvalue 1 of the following system:
-
-        \begin{align*}
-                A\cdot \begin{bmatrix}
-                    x_1\\
-                    x_2\\
-                    x_3\\
-                    x_4\\
-                \end{bmatrix} &= \begin{bmatrix}
-                    x_1\\
-                    x_2\\
-                    x_3\\
-                    x_4\\
-                \end{bmatrix}
-        \end{align*}
-    \end{outline}
-\end{frame}
+%\begin{frame}[t]{Solving for Eigenvector}
+%    \begin{outline}
+%            \2 Find an eigenvector $v$ corresponding to the eigenvalue 1 of the following system:
+%    \end{outline}
+%\end{frame}
 
 \begin{frame}[t]{Considerations with the Eigenvalue}
 \begin{outline}
@@ -190,23 +210,8 @@
 \end{outline}
 \end{frame}
 
-\begin{frame}[t]{Probability Problem}
-\begin{outline}
-    \1 In the underlying assumption, the ranking of website is the relative relationship between all websites. 
-    \1 Thus we can interpret this problem differently: 
-    \1 The ranking of a website $w$ can be viewed as the probability that a random surfer opens the browser, starts following links, and ends up in that website $w$.
-    \1 Now we interpret the graph's weighted edge in a probabilistic way
-    \1 If the random surfer are currently at node $w_1$, for example, then there is a 1/3 chance he would go to node $w_2$, 1/3 chance he would go to node $w_3$, 1/3 chance he would go to node $w_4$. 
-    \1 We can model this surfing process as a random walk on graph. 
-\end{outline}
-\end{frame}
-
 \begin{frame}[t]{Spider Traps and Deadends}
 
-\end{frame}
-
-\begin{frame}[t]{Random Teleports + Damping factor}
-    
 \end{frame}
 
 \begin{frame}[t]{The solution to the Spider traps}
@@ -254,6 +259,28 @@
 \2 This is divided by $d_i$, which is the probability that the random surf traverses the link when iterating towards $j$. This only happens with probability $\beta$, when the surfer decides to follow the link.
 \2 The $(1-\beta)/n$ represents when the random walkers decide to jump somewhere else, using the probability ($1-\beta) \cdot 1/n$, where $n$ is the number of nodes in the entire network.
 \end{outline}
+\end{frame}
+
+
+\begin{frame}[t]{The Google Matrix}
+    \begin{mdframed}[backgroundcolor=blue!20]
+        \begin{center}
+            $A = \beta M + (1-\beta)\dfrac{1}{n}e\cdot e^T$
+        \end{center}
+    \end{mdframed}
+    \begin{itemize}
+       
+        \item Matrix A, also known as the google matrix, is the transition matrix multiplied with ß(for random jumps) plus the probabilities due to random jumps, known as (1-ß). 
+    
+    
+    \item This is then multiplied by e, the outer product of a vector that is of all 1s.
+    \end{itemize}
+    \end{frame}
+
+\begin{frame}{Using the Google Matrix Example}
+    \begin{center}
+        \includegraphics[width=\textwidth]{example.jpg}   
+    \end{center}
 \end{frame}
 
 \end{document}
