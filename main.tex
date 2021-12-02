@@ -6,6 +6,7 @@
 
 \usepackage{outlines}
 \usepackage{graphicx}
+\usepackage{amsmath}
 \usepackage{color, xcolor, mdframed}
 
 \graphicspath{{./images}}
@@ -138,9 +139,9 @@
 \begin{outline}
     \1 At first, we assign each vertex $v\in V$ with a weight of $\dfrac{1}{|V|}$. 
     \1 All vertices have equal weight, and our weights sum up to 1. The weight of a particular vertex $v_i$ is denoted $PR(v_i)$.
-    \1 Consider the set $V_i$ of vertices that $v_i$ has an edge to:
-        \2 $V_i = \{v_j | v_iv_j \in E\}$
-    \1 A user on page 1 can choose to click a link to traverse to either 2, 3, or 4. In other words, $V_1 = \{2, 3, 4\}$.
+    \1 Consider the set $O_i$ of vertices that $v_i$ has an edge to:
+        \2 $O_i = \{v_j | v_iv_j \in E\}$ ($O$ for outbound)
+    \1 A user on page 1 can choose to click a link to traverse to either 2, 3, or 4. In other words, $O_1 = \{2, 3, 4\}$.
 %    \1 For each vertex in the set, the weight of the edge to that vertex will be the PageRank value of the source node divided by the number of outbound edges it has
 %        \2 $\forall v_j \in V_i: w(v_iv_j) = \dfrac{PR(v_i)}{|V_i|}$
 %    \1 In other words, all the outbound edges from a particular vertex will have the same weight
@@ -154,10 +155,10 @@
 \frametitle{Traversing from Page to Page}
 \begin{itemize}
     \setlength\itemsep{1em}
-    \item Assumption: A user on page $i$ user is equally likely to choose to visit each vertex in $V_i$ (our set of vertices that $v_i$ cites)
-    \item In our example from before, the probabilty that our user on page 1 visits page 2 is $P(v_2) = \dfrac{1}{|V_1|} = \dfrac{1}{3}$
+    \item Assumption: A user on page $i$ user is equally likely to choose to visit each vertex in $O_i$ (our set of vertices that $v_i$ cites)
+    \item In our example from before, the probabilty that our user on page 1 visits page 2 is $P(v_2) = \dfrac{1}{|O_1|} = \dfrac{1}{3}$
     \item So a third of page 1's visitors will "flow" to page 2, a third to page 3, and a third to page 4
-    \item From $v_i$, $P(v_j) = \dfrac{1}{|V_i|}$ if $v_j \in V_i$, and 0 else.
+    \item From $v_i$, $P(v_j) = \dfrac{1}{|O_i|}$ if $v_j \in O_i$, and 0 else.
 \end{itemize}
 \end{frame}
 
@@ -165,69 +166,190 @@
 \frametitle{Iteration Model}
 \begin{outline}
     \1 All at once, all users will click one of the links on their current page
-    \1 At "click 0", the PageRank value of all vertices $PR(v) = \dfrac{1}{|V|}$
+    \1 At "click 0", the PageRank value of all vertices $PR(v, 0) = \dfrac{1}{|V|}$
     \1 On click 1, each page will equally split its PageRank value among the pages it cites
-    \1 Page 1 starts with $PR(v_1) = \dfrac{1}{4}$ at click 0, and contributes $\dfrac{1}{12}$ to each of 2, 3, and 4 on click 1
-    \1 Conversely, page 1 will receive nothing from page 2, all of $PR(v_3)$, and half of $PR(v_4)$. So after click 1, $PR(v_1) = 0\cdot PR(v_2) + PR(v_3) + \dfrac{1}{2}PR(v_4) = \dfrac{1}{4} + \dfrac{1}{8} = \dfrac{3}{8}$
+    \1 Page 1 starts with $PR(v_1, 0) = \dfrac{1}{4}$, and contributes $\dfrac{1}{12}$ to each of 2, 3, and 4 on click 1
+    \1 Conversely, page 1 will receive nothing from page 2, all of $PR(v_3, 0)$, and half of $PR(v_4, 0)$. So after click 1, 
+    \begin{align*}
+        PR(v_1, 1) &= 0\cdot PR(v_2, 0) + PR(v_3, 0) + \dfrac{1}{2}PR(v_4, 0) \\
+        &= \dfrac{1}{4} + \dfrac{1}{8} = \dfrac{3}{8}\\
+    \end{align*}
 %    \1 After click $n$, $PR(v_1) = \dfrac{1}{|V_2|}PR(v_2) + \dfrac{1}{|V_3|}PR(v_3) + \dfrac{1}{|V_4|}PR(v_4)$
 \end{outline}
 \end{frame}
 
-\begin{frame}
-\frametitle{Example iterations}
-\bgroup
-\def\arraystretch{2.5}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-    \hline
-    $PR$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7\\
-    \hline
-    $v_1$ & $\dfrac{1}{4}$ & $\dfrac{3}{8}$ & $\dfrac{7}{16}$ & 0.3542 & 0.3958 & 0.3906& 0.3819 & 0.3898\\
-    $v_2$ & $\dfrac{1}{4}$ & $\dfrac{1}{12}$ & $\dfrac{1}{8}$ & 0.1458 & 0.1181 & 0.1319& 0.1302 & 0.1273\\
-    $v_3$ & $\dfrac{1}{4}$ & $\dfrac{1}{3}$ & $\dfrac{13}{48}$ & 0.2917 & 0.2951 & 0.2865& 0.2917 & 0.2905\\
-    $v_4$ & $\dfrac{1}{4}$ & $\dfrac{5}{24}$ & $\dfrac{1}{6}$ & 0.2083 & 0.1910 & 0.1910 & 0.1962 & 0.1924\\
-    \hline
-\end{tabular}
-\egroup
-\begin{itemize}
-    \item Looks okay, but the values don't quite converge
-\end{itemize}
+%\begin{frame}
+%\frametitle{Example iterations}
+%\bgroup
+%\def\arraystretch{2.5}
+%\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+%    \hline
+%    $PR$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7\\
+%    \hline
+%    $v_1$ & $\dfrac{1}{4}$ & $\dfrac{3}{8}$ & $\dfrac{7}{16}$ & 0.3542 & 0.3958 & 0.3906& 0.3819 & 0.3898\\
+%    $v_2$ & $\dfrac{1}{4}$ & $\dfrac{1}{12}$ & $\dfrac{1}{8}$ & 0.1458 & 0.1181 & 0.1319& 0.1302 & 0.1273\\
+%    $v_3$ & $\dfrac{1}{4}$ & $\dfrac{1}{3}$ & $\dfrac{13}{48}$ & 0.2917 & 0.2951 & 0.2865& 0.2917 & 0.2905\\
+%    $v_4$ & $\dfrac{1}{4}$ & $\dfrac{5}{24}$ & $\dfrac{1}{6}$ & 0.2083 & 0.1910 & 0.1910 & 0.1962 & 0.1924\\
+%    \hline
+%\end{tabular}
+%\egroup
+%\end{frame}
+
+\begin{frame}[t]{What else do we need?}
+    \begin{outline}
+        \1 We want a function $f(v_i, v_j)$ defined as:
+        \begin{mdframed}[backgroundcolor=blue!20]
+            \begin{center}
+                $f(v_i, v_j) := \dfrac{\text{\# of links from page }i\text{ to page }j}{\text{total \# of links out of page }j}$        
+            \end{center}    
+        \end{mdframed}
+        \1 In our simplified case, this will be $\dfrac{1}{|O_j|}$ if $j$ links to $i$, and 0 else
+        \1 Additionally, at some point, our user who is randomly clicking links will eventually stop clicking links
+        \1 At each iteration we consider a constant probability\\ $d :=$ the probability that our user stops traversing the graph
+            \2 Various studies have settled on $d\approx 0.85$
+    \end{outline}
 \end{frame}
 
 \begin{frame}[t]
-\frametitle{Introducing a Damping factor}
+\frametitle{General PageRank equation}
 \begin{outline}
-    \1 At some point, our user who is randomly clicking links will eventually stop clicking links
-    \1 At each iteration we consider a constant probability\\ $d :=$ the probability that our user stops traversing the graph
-        \2 Various studies have settled on $d\approx 0.85$
-    \1 For an arbitrary graph:
-\end{outline}
-\begin{mdframed}[backgroundcolor=blue!20]
-    \begin{math}
-        PR(v_i) = \dfrac{1-d}{|V|} + d(c_1PR(v_1) + c_2PR(v_2) + c_3PR(v_3))
-    \end{math}
-\end{mdframed}
-\begin{outline}
-    \1 $c_n = \dfrac{1}{|V_n|}$ if $i \in V_n$, and 0 else. 
-        \2 If $n$ cites $i$, then $n$ contributes its equally distributed value to $i$. If $n$ doesn't cite $i$, $n$ contributes 0 to $i$.
-    \1 If $|V_j| = 0$, we use $|V|$ (random jump from sinks)
+    \1 For an arbitrary graph, we obtain the PageRank value of vertex $v_i$ at iteration $t + 1$ from the following: 
+    \begin{mdframed}[backgroundcolor=blue!20]
+        \begin{center}
+            \begin{math}
+                PR(v_i, t+1) = \dfrac{1-d}{|V|} + d\sum\limits_{v_j \in I_i} f(v_i, v_j) PR(v_j, t)
+            \end{math}
+        \end{center}
+    \end{mdframed}
+    \vspace{1em}
+
+    \begin{tabular}{cc}
+        $O_i$ is set of vertices with & $I_i$ is the set of vertices with \\
+        edges outbound from $v_i$ & edges inbound to $v_i$\\
+    \end{tabular}
+
+    \vspace{1em}
+
+    \begin{center}
+        $f(v_i, v_j)=\begin{cases} 
+            \dfrac{1}{|O_j|} & i \in O_j\\
+            0 & \text{else} 
+         \end{cases}$\\
+    \end{center}
 \end{outline}
 \end{frame}
 
-\begin{frame}
-\frametitle{Iterations w/ Damping}
-\bgroup
-\def\arraystretch{2.5}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-    \hline
-    $PR$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\%& 7\\
-    \hline
-    $v_1$ & $\dfrac{1}{4}$ & 0.3562 & 0.4014 & 0.3502 & 0.3720 & 0.3697 & 0.3664\\% & 0.3689\\
-    $v_2$ & $\dfrac{1}{4}$ & 0.1083 & 0.1384 & 0.1512 & 0.1367 & 0.1429 & 0.1422\\% & 0.1413\\
-    $v_3$ & $\dfrac{1}{4}$ & 0.3208 & 0.2757 & 0.2885 & 0.2903 & 0.2864 & 0.2884\\% & 0.2880\\
-    $v_4$ & $\dfrac{1}{4}$ & 0.2146 & 0.1845 & 0.2101 & 0.2010 & 0.2010 & 0.2030\\% & 0.2018\\
-    \hline
-\end{tabular}
-\egroup
+%\begin{frame}
+%\frametitle{Iterations w/ Damping}
+%\bgroup
+%\def\arraystretch{2.5}
+%\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+%    \hline
+%    $PR$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 \\%& 7\\
+%    \hline
+%    $v_1$ & $\dfrac{1}{4}$ & 0.3562 & 0.4014 & 0.3502 & 0.3720 & 0.3697 & 0.3664\\% & 0.3689\\
+%    $v_2$ & $\dfrac{1}{4}$ & 0.1083 & 0.1384 & 0.1512 & 0.1367 & 0.1429 & 0.1422\\% & 0.1413\\
+%    $v_3$ & $\dfrac{1}{4}$ & 0.3208 & 0.2757 & 0.2885 & 0.2903 & 0.2864 & 0.2884\\% & 0.2880\\
+%    $v_4$ & $\dfrac{1}{4}$ & 0.2146 & 0.1845 & 0.2101 & 0.2010 & 0.2010 & 0.2030\\% & 0.2018\\
+%    \hline
+%\end{tabular}
+%\egroup
+%\begin{itemize}
+%    \item Looks okay, but the values don't quite converge
+%\end{itemize}
+%\end{frame}
+
+\section{Solving PageRank as a Matrix}
+\begin{frame}[t]{Matrix Construction}
+\begin{outline}
+    \1 The idea behind PageRank is construct and solve a matrix
+    \1 Each row $i$ represents the PageRank equation for $PR(v_i, t)$ 
+    \1 Each column $j$ represents the PageRank value contributed by $j$ to each vertex $v_i$
+    \1 The solved for $t+1$ iteration PageRank values will therefore be a vector:
+    \begin{center}
+        \begin{math}
+            \begin{bmatrix}
+                PR(v_1, t+1)\\
+                PR(v_2, t+1)\\
+                \vdots\\
+                PR(v_n, t+1)\\
+            \end{bmatrix}
+        \end{math}
+    \end{center}
+    %\1 We can pull out all of the $\dfrac{1-d}{|V|}$ into a vector to get:
+    %\begin{math}
+    %    \begin{bmatrix}
+    %        (1-d)/|V|\\
+    %        (1-d)/|V|\\
+    %        \vdots\\
+    %        (1-d)/|V|\\
+    %    \end{bmatrix} + d \begin{bmatrix}
+    %        f(v_1, v_1) & c(v_1, v_2)
+    %    \end{bmatrix}
+    %\end{math}
+\end{outline}
+\end{frame}
+
+\begin{frame}[t]{Boiling it Down to an Eigenvalue}
+\begin{outline}
+    \1 For our iteration process, we want to be able to input a vector of PageRank values at iteration $t$ vector $\mathbf{R}(t)$, and get back a vector of PageRank values at iteration $t+1$ ($\mathbf{R}(t+1)$)
+    \1 In other words, we can determine PageRank values as 
+    \begin{center}
+        \begin{math}
+            \begin{bmatrix}
+                PR(v_1, t+1)\\
+                PR(v_2, t+1)\\
+                \vdots\\
+                PR(v_n, t+1)\\
+            \end{bmatrix} = A\cdot \begin{bmatrix}
+                PR(v_1, t)\\
+                PR(v_2, t)\\
+                \vdots\\
+                PR(v_n, t)\\
+            \end{bmatrix}
+        \end{math}
+    \end{center}
+    for an $n\times n$ matrix $A$ 
+    \1 For our values to converge, our input vector will approximately equal our output vector 
+    \1 In other words, we're searching for an eigenvector
+\end{outline}
+\end{frame}
+
+\begin{frame}[t]{Defining Our Matrix $A$}
+    \begin{outline}
+        \1 Observe our general PageRank equation
+        \begin{mdframed}[backgroundcolor=blue!20]
+            \begin{center}
+                \begin{math}
+                    PR(v_i, t+1) = \dfrac{1-d}{|V|} + d\sum\limits_{v_j \in I_i} f(v_i, v_j) PR(v_j, t)
+                \end{math}
+            \end{center}
+        \end{mdframed}
+        \1 We define the matrix $A$ to the $n\times n$ matrix where $A_{ij}:= f(v_i, v_j)$
+        \1 We then multiply this matrix by our $t$ iteration PageRank vector
+        \1 Finally, we add the result by a $n$ length vector of $\dfrac{1-d}{|V|}$ terms
+        \begin{center}
+            \begin{math}
+                \mathbf{R}(t+1) = \begin{bmatrix}
+                    (1-d)/|V|\\
+                    (1-d)/|V|\\
+                    \vdots\\
+                    (1-d)/|V|\\
+                \end{bmatrix} + \begin{bmatrix}
+                    f(v_1, v_1) & \ldots &f(v_1, v_n)\\
+                    f(v_2, v_1) & \ldots &f(v_2, v_n)\\
+                    \vdots & \ddots & \vdots \\
+                    f(v_n, v_1) & \ldots &f(v_n, v_n)\\
+                \end{bmatrix}\cdot \mathbf{R}(t)
+            \end{math}
+        \end{center}
+    \end{outline}
+\end{frame}
+
+\begin{frame}[t]{Determining Existance of $PR$ Eigenvector}
+    \begin{outline}
+        \1 Each column $i$ of our matrix is the series of terms $f(v_1, v_i)$ through $f(v_n, v_i)$
+    \end{outline}
 \end{frame}
 
 \section{Applications}
