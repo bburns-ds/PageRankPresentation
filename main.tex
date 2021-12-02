@@ -190,6 +190,24 @@
 \end{outline}
 \end{frame}
 
+\begin{frame}[t]{Power Iteration Method}
+    \begin{outline}
+        \1 Want to determine the eigenvector of the square matrix $A$
+        \1 Start out with 
+        \begin{center}
+            $\vec{v_0} = \begin{bmatrix}
+                0.25 \\ 0.25 \\ 0.25 \\ 0.25 \\
+            \end{bmatrix}$
+        \end{center}
+        as a candidate eigenvector corresponding to eigenvalue of 1
+        \1 Calculate $\vec{v_1} = A\vec{v_0}$ to get a new vector
+        \1 Continue to iterate until $v_k$ converges 
+        \1 Two questions:
+            \2 Will $v_k$ always converge?
+            \2 Will $v_k$ give us any useful information about the ranking of websites?
+    \end{outline}
+\end{frame}
+
 \subsection{Probability Method}
 \begin{frame}[t]{Probability Approach}
     \begin{outline}
@@ -200,24 +218,35 @@
     \end{outline}
 \end{frame}
 
-\begin{frame}[t]{Power Iteration Method}
-\begin{outline}
-    \1 Want to determine the eigenvector of the square matrix $A$
-    \1 Start out with 
-    \begin{center}
-        $\vec{v_0} = \begin{bmatrix}
-            0.25 \\ 0.25 \\ 0.25 \\ 0.25 \\
-        \end{bmatrix}$
-    \end{center}
-    as a candidate eigenvector corresponding to eigenvalue of 1
-    \1 Calculate $\vec{v_1} = A\vec{v_0}$ to get a new vector
-    \1 Continue to iterate until $v_k$ converges 
-    \1 Two questions:
-        \2 Will $v_k$ always converge?
-        \2 Will $v_k$ give us any useful information about the ranking of websites?
-\end{outline}
+\begin{frame}[t]{Random Walk Interpretation}
+    \begin{outline}
+        \1 Consider someone browsing the web who is randomly clicking on links. We refer to this person as the "random walker" 
+        \1 Interpret our rank vector $r$ as a probability distribution $p(t)$ where $t$ is time
+        \1 $p(t) = \left[ \dfrac{1}{N}, \dfrac{1}{N}, \ldots, \dfrac{1}{N} \right]^T$ is a vector where at some time $t$ the $i^{th}$ index represents the probability that the random walker is at page $i$.
+        \1 To predict where the random walker is at time $t + 1$ we calculate $Mp(t) = p(t + 1)$
+    \end{outline}
 \end{frame}
 
+\begin{frame}[t]{Random Walk Interpretation}
+\begin{outline}
+    \1 Suppose that for some $t$ we find that $Mp(t) = p(t)$
+    \1 In other words, we have found a steady state distribution!
+    \1 We recognize this as a Markov process where the probability that the random walker is in a given page at some time $t$ is solely determined by what our probability distribution looked like at time $t-1$
+    \1 From Markov theory, we know that the transition matrix $M$ needs to follow a few characteristics for $p(t)$ to converge to a unique vector
+    \1 What constraints do we need to apply to $M$ so that the power iteration algorithm will always converge?
+\end{outline}   
+\end{frame}
+
+\begin{frame}[t]{When Power Iteration Fails}
+    \begin{outline}
+        \1 Before discussing constaints on $M$ we need to observe the cases where power iteration either fails to converge or produces a nonsense result
+        \1 So far, we have gone along with the formulation of PageRank where the importance of a webpage depends on its incoming links
+        \1 We haven't taken the time to consider if this approach even makes sense
+        \1 Consider two problems that arise:
+            \2 Spider Traps
+            \2 Dead Ends
+    \end{outline}
+\end{frame}
 \section{Treating Problematic Edge Cases}
 \begin{frame}[t]{Spider Traps}
 \begin{outline}
@@ -263,10 +292,9 @@
 \end{frame}
 \begin{frame}[t]{The Solution to the Spider Traps}
     \begin{itemize}
-        \item At each time step, the random surfer chooses 1 of 2 options:
-        \item With some probability $\beta$, the surfer will follow a random link
-        \item With the remaining probability 1 -$\beta$ , the surfer will jump to random page
-        \item This means within a few time steps, the surfer will teleport out of the spider trap within a few time steps
+        \item At each iteration, we give the random walker the option to either continue following outbound links or to randomly "teleport" to another page on the web
+        \item We denote the probability that the user clicks a link by $\beta$, and the probability of teleporting by 1 -$\beta$
+        \item Now our random walkers can't get stuck in a subgraph of our web, and we avoid having a subset of pages hog all of the "importance" value
     \end{itemize}
 \end{frame}
     
@@ -289,18 +317,20 @@
 \end{frame}
 \begin{frame}[t]{The Solution to Dead Ends}
 \begin{outline}
-\1 Dead end problem: the pages that have zero scores, which leads to their PageRank score not getting distributed to any other page in the graph, not pointing to any other graph
-\1 After running the power iteration, after several iterations, it will converge towards zero, which leads to the PageRank score of a particular node not being passed down and leaking out of the system
-\1 How to solve the Dead Ends Problem:
-        \2 Solution: Always Teleports
-        \2 If a node has no outgoing links, when we reach that node, we teleport with a probability of 1
-        \2 this means that whenever we reach the dead-end node, we will always jump out and reach somewhere else
+\1 If our random walker encounters a page with no outbound links, we immediately teleport them to a random web page
+\1 Example:
+
+\begin{center}
+    \includegraphics[width=0.7\textwidth]{desol.png}
+\end{center}
 \end{outline}
 \end{frame}
     
-\begin{frame}[t]{Why Do Teleports Solve the Problem?}
+\begin{frame}[t]{Do Teleports Solve Convergence?}
 \begin{outline}
-\1 For any start vector, the power method applied to a Markov transition matrix $A$ will converge to a unique positive stationary vector as long as $A$ is stochastic, irreducible, and aperiodic.
+\1 Yes. In fact, after dealing with spider traps and dead ends, the power iteration algorithm will always converge
+\1 Recall that power iteration is simply a Markov process where if matrix $M$ has special characteristics it will always converge
+\1 Markov theory tells us that if $M$ is stochastic, aperiodic, and irreducible, then it will always converge to a unique, positive, stationary vector
 \end{outline}
 \end{frame}
    
