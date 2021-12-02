@@ -1,7 +1,8 @@
 # Ignore everything
-*.aux
-*.fls
+*
 
 # But not these files...
 !.gitignore
 !main.tex
+!main.pdf
+!README.md
