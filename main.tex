@@ -35,12 +35,18 @@
 \end{frame}
 
 \section{Background}
-\begin{frame}[t]{PageRank}
+\begin{frame}[t]{The Big Idea behind PageRank}
 \begin{outline}
-    \1 PageRank is the algorithm to determine the importance of a website relatively to all other websites. The algorithm ranks the importance of website $w,$ i.e., PR($w$), based on the number of links points to website w and the \emph{quality} of each pointing link from the other source website. 
+    \1 PageRank is an algorithm to determine the importance of a website relatively to all other websites. The algorithm ranks the importance of website $w,$ i.e., PR($w$), based on the number of links points to website w and the \emph{quality} of each pointing link from the other source website. 
 
     \1 \textbf{The underlying assumption}: More important website are likely to receive more links from other website. Since the algorithm measures the relative popularity ("ranking") between all websites, websites with higher ranking score are ranked higher. The sum of all ranking score equals 1 (will see why later).
 \end{outline}
+\end{frame}
+
+\begin{frame}{Visulization of PageRank score}
+    \begin{center}
+        \includegraphics[width=0.9\textwidth]{pagerankexample.png}
+    \end{center}
 \end{frame}
 
 \section{Formalizing PageRank}
@@ -51,20 +57,23 @@
             \includegraphics[width=\textwidth]{unweighted.png}
         \end{column}
         \begin{column}{0.5\textwidth}
-            As a graph: Each website is represented by a node assigned with a PageRank value, denoted by PR(w). If a website w has a link to another website v (meaning there are an outbound link from w and an inbound link to v), then there is a directed edge from node w to node v. Multiple links from w to v is treated as a single edge from node w to v, and all self-links from a website to itself are ignored. Thus, this is a node-weighted, simple, no self-loop directed graph.
+            As a graph: Each website is represented by a node assigned with a PageRank value, denoted by PR(w). If a website w has a link to another website v (meaning there are an outbound link from w and an inbound link to v), then there is a directed edge from node w to node v. Multiple links from w to v is treated as a single edge from node w to v, and all self-links from a website to itself are ignored. \textbf{Thus, this is a node-weighted, simple, no self-loop directed graph.}
         \end{column}
     \end{columns}
 \end{outline}
 \end{frame}
 
 \begin{frame}
-\frametitle{Edge Weights}
+\frametitle{Add Weight to Edges}
 \begin{columns}
     \begin{column}{0.5\textwidth}
         \includegraphics[width=\textwidth]{weighted.png}
     \end{column}
     \begin{column}{0.5\textwidth}
-        This edge has its weight equal to PR(*w*) divided by the total number of outbound links of $w$, L($w$). Then recipient node $v$ "receives" the PageRank value of $w$, adding to its own value, i.e., PR($v$) += PR($w$)/L($w$). 
+        \begin{outline}
+            
+        \end{outline}
+        An edge from $u$ to $v$ will "transfer" the score from node $u$ to node $v$ an amount of PR($u$)/O($u$), where PR($u$) is the current score of $u$, and O($u$) is the total number of outlinks of node $u$.  Thus, PR($v$) += PR($w$)/L($w$). 
         
         In another words, for a given node in the graph:
 
@@ -75,7 +84,7 @@
 \end{columns}
 \end{frame}
 
-\section{Ways to Solve}
+\section{Ways to Interpret PageRank}
 \begin{frame}[t]{Perspectives for Solving}
     \begin{itemize}
         \setlength\itemsep{1em}
@@ -106,16 +115,6 @@
 %    \1 No self loops means the main diagonal is all zeros
 %\end{outline}
 %\end{frame}
-
-\subsection{Probability Method}
-\begin{frame}[t]{Probability Problem}
-    \begin{outline}
-        \1 In the underlying assumption, the ranking of website is the relative relationship between all websites. 
-        \1 The ranking of a website $w$ can be viewed as the probability that a random surfer opens the browser, starts following links, and ends up in that website $w$.
-        \1 If the random surfer are currently at node $w_1$, for example, then there is a 1/3 chance he would go to node $w_2$, 1/3 chance he would go to node $w_3$, 1/3 chance he would go to node $w_4$. 
-        \1 We can model this surfing process as a random walk on graph. 
-    \end{outline}
-\end{frame}
 
 \begin{frame}[t]{System of Equations}
     \begin{outline}
@@ -189,6 +188,16 @@
     \1 Every vector in the above format is the eigenvector corresponding to eigenvalue 1. 
     \1 We choose $c$ such that the sum of all entries in this vector equals 1 (we later refer to it as "the probabilistic eigenvector corresponding to the eigenvalue 1")
 \end{outline}
+\end{frame}
+
+\subsection{Probability Method}
+\begin{frame}[t]{Probability Approach}
+    \begin{outline}
+        \1 In the underlying assumption, the ranking of website is the relative relationship between all websites. 
+        \1 The ranking of a website $w$ can be viewed as the probability that a random surfer opens the browser, starts following links, and ends up in that website $w$.
+        \1 If the random surfer are currently at node $w_1$, for example, then there is a 1/3 chance he would go to node $w_2$, 1/3 chance he would go to node $w_3$, 1/3 chance he would go to node $w_4$. 
+        \1 We can model this surfing process as a random walk on graph. 
+    \end{outline}
 \end{frame}
 
 \begin{frame}[t]{Power Iteration Method}
@@ -291,21 +300,38 @@
     
 \begin{frame}[t]{Why Do Teleports Solve the Problem?}
 \begin{outline}
-\1 For any start vector, the power method applied to a Markov transition matrix A will converge to a unique positive stationary vector as long as A is stochastic, irreducible, and aperiodic.
+\1 For any start vector, the power method applied to a Markov transition matrix $A$ will converge to a unique positive stationary vector as long as $A$ is stochastic, irreducible, and aperiodic.
 \end{outline}
 \end{frame}
    
-\begin{frame}[t]{Stocastic}
-    Stochastic: Every column in the transition matrix sums to 1
+\begin{frame}[t]{Stochastic}
+\begin{outline}
+    \1 Every column in the transition matrix must sum to 1
+    \1 When initially constructing our adjacency matrix $A$, if a page has no outbound links (dead end) then the entire column would sum up to 0.
+    \1 Our solution to deadends guarantees that every column adds up to 1.
+\end{outline}
 \end{frame}
 
 \begin{frame}[t]{Aperiodic}
-    Aperiodic: A chain is periodic if there exist $k > 1$ such that the interval between two visits to some state s is always a multiple of $k$
+\begin{outline}
+    \1 A chain is periodic if there exist $k > 1$ such that the interval between two visits to some state s is always a multiple of $k$
+    \1 Our solution to spider traps also introduces self-loops into the graph 
+    \1 This turns the graph aperiodic
     
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{aperiodic.png}
+    \end{center}
+
+\end{outline}
+
 \end{frame}
 
 \begin{frame}[t]{Irreducible}
-    Irreducible: From any state, there is a non-zero probability of going from any one state to another
+\begin{outline}
+    \1 Irreducible: From any state, there is a non-zero probability of going from any one state to another
+    \1 Our solution to spider traps gives the random walker the opportunity to randomly jump to any page in the web graph
+    \1 Therefore, we will always be able to navigate 
+\end{outline}
 \end{frame}
 
 \begin{frame}[t]{The PageRank equation}
