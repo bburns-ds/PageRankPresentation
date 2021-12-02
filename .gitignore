@@ -1,7 +1,7 @@
 # Ignore everything
 *
 
-# But not these files...
+# Exceptions
 !.gitignore
 !main.tex
 !main.pdf
