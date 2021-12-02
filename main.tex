@@ -173,11 +173,32 @@
 \end{frame}
 
 \begin{frame}[t]{Power Iteration Method}
-
+\begin{outline}
+    \1 Want to determine the eigenvector of the square matrix $A$
+    \1 Start out with 
+    \begin{center}
+        $\vec{v_0} = \begin{bmatrix}
+            0.25 \\ 0.25 \\ 0.25 \\ 0.25 \\
+        \end{bmatrix}$
+    \end{center}
+    as a candidate eigenvector corresponding to eigenvalue of 1
+    \1 Calculate $\vec{v_1} = A\vec{v_0}$ to get a new vector
+    \1 Continue to iterate until $v_k$ converges 
+    \1 Two questions:
+        \2 Will $v_k$ always converge?
+        \2 Will $v_k$ give us any useful information about the ranking of websites?
+\end{outline}
 \end{frame}
 
 \begin{frame}[t]{Probability Problem}
-
+\begin{outline}
+    \1 In the underlying assumption, the ranking of website is the relative relationship between all websites. 
+    \1 Thus we can interpret this problem differently: 
+    \1 The ranking of a website $w$ can be viewed as the probability that a random surfer opens the browser, starts following links, and ends up in that website $w$.
+    \1 Now we interpret the graph's weighted edge in a probabilistic way
+    \1 If the random surfer are currently at node $w_1$, for example, then there is a 1/3 chance he would go to node $w_2$, 1/3 chance he would go to node $w_3$, 1/3 chance he would go to node $w_4$. 
+    \1 We can model this surfing process as a random walk on graph. 
+\end{outline}
 \end{frame}
 
 \begin{frame}[t]{Spider Traps and Deadends}
