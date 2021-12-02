@@ -1,7 +1,7 @@
 \documentclass{beamer}
 
 \title{PageRank}
-\author{Ben Burns, Dan Magazu, Lucas Chagas, \\Thomas Webster, Trung Do}
+\author{Ben Burns, Dan Magazu, Lucas Chagas, \\Thomas Wester, Trung Do}
 \date{Fall 2021}
 
 \usepackage{outlines}
@@ -250,6 +250,41 @@
 \end{itemize}    
 \end{frame}
 
+\begin{frame}[t]{Probabilistic Approach}
+\begin{outline}
+    \1 Let $\vec{v_0}$ be the initial state where the probability that a random surfer opens the web ends up at a page $w_i$ is $x_i = PR(w_i) = 0.25$
+    \begin{center}
+        $\vec{v_0} = \begin{bmatrix}
+            0.25\\0.25\\0.25\\0.25\\
+        \end{bmatrix}$\\
+        $\vec{v_1} = \begin{bmatrix}
+            0 & 0 & 1 & 0.5\\
+            0.33 & 0 & 0 & 0\\
+            0.33 & 0.5 & 0 0.5\\
+            0.33 & 0.5 0 & 0\\
+        \end{bmatrix}\begin{bmatrix}
+            0.25\\0.25\\0.25\\0.25\\
+        \end{bmatrix}$\\
+        $(=) \begin{bmatrix}
+            1\cdot PR(w_3) + 0.5 PR(w_4)\\
+            0.33PR(w_1)\\
+            0.33PR(w_1) + 0.5PR(w_2) + 0.5PR(w_4)\\
+            0.33PR(w_1) + 0.5PR(w_2)\\
+        \end{bmatrix} = \begin{bmatrix}
+            0.37\\0.08\\0.33\\0.20\\
+        \end{bmatrix}$
+    \end{center}
+    
+\end{outline}
+\end{frame}
+
+\begin{frame}[t]{Brief Recap}
+\begin{outline}
+    \1 Recall that we have reduced PageRank to an eigenvector problem where we have a column stochastic matrix $M$ and some rank vector $r$ such that $Mr = r$
+    \1 Power iteration algorithm gave us a method to calculate eigenvector $r$ (with corresponding eigenvalue 1)
+    \1 For power iteration we initialized $r_0 = \left[ \dfrac{1}{N}, \dfrac{1}{N}, \ldots, \dfrac{1}{N}\right]^T$ and calculated $Mr_0 = r_1$, then $Mr_1 = r_2$, then $Mr_2 = r_3, \ldots$, until we reached $Mr_m = r_n$ where $||r_m - r_n|| < \epsilon$
+\end{outline}
+\end{frame}
 \subsection{Random Walk Interpretation}
 \begin{frame}[t]{Random Walk Interpretation}
     \begin{outline}
