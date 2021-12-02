@@ -126,39 +126,85 @@
     
 \end{frame}
 
+\begin{frame}[t]{The solution to the Spider traps}
+    \begin{itemize}
+        \item At each time step, the random surfer chooses 1 of 2 options:
+        \item With some probability $\beta$, the surfer will follow a random link
+        \item With the remaining probability 1 -$\beta$ , the surfer will jump to random page
+        \item This means within a few time steps, the surfer will teleport out of the spider trap within a few time steps
+    \end{itemize}
+\end{frame}
+    
+\begin{frame}[t]{The Solution to Dead Ends}
+\begin{outline}
+\1 Dead end problem: the pages that have zero scores, which leads to their PageRank score not getting distributed to any other page in the graph, not pointing to any other graph
+\1 After running the power iteration, after several iterations, it will converge towards zero, which leads to the PageRank score of a particular node not being passed down and leaking out of the system
+\1 How to solve the Dead Ends Problem:
+        \2 Solution: Always Teleports
+        \2 If a node has no outgoing links, when we reach that node, we teleport with a probability of 1
+        \2 this means that whenever we reach the dead-end node, we will always jump out and reach somewhere else
+\end{outline}
+\end{frame}
+    
+\begin{frame}[t]{Why Do Teleports Solve the problem?}
+\begin{outline}
+\1 For any start vector, the power method applied to a Markov transition matrix A will converge to a unique positive stationary vector as long as A is stochastic, irreducible, and aperiodic.
+    \2 Stochastic: Every column in the transition matrix sums to 1
+    \2 Aperiodic: A chain is periodic if there exist k > 1 such that the interval between two visits to some state s is always a multiple of k
+    \2 Irreducible: From any state, there is a non-zero probability of going from any one state to another
+\end{outline}
+\end{frame}
+    
+\begin{frame}[t]{The PageRank equation}
+\begin{outline}
+\1 Google's solution makes the Markov Transition matrix stochastic, aperiodic, and irreducible.
 
-\section{Applications}
-\begin{frame}[t]
-    \frametitle{Applications}
-    \begin{outline}
-        \1 PageRank is perhaps the most famous search ranking algorithm. Googles high-quality search engine results are directly correlated to PageRank
-        \1 There are a remarkable wide variety of applications of the PageRank algorithm that apply to non-search engine contexts.
-        \1 Its simplicity and elegance allow PageRank to be a more general and powerful tool.
-        \1 Let's look at the applications of PageRank and its connection to Twitter.
+\1 PageRank equation:
 
-    \end{outline}
+\begin{mdframed}[backgroundcolor=blue!20]
+    \begin{center}
+        $r_j = \sum\limits_{i\to j}\beta \dfrac{r_i}{d_i} + (1-\beta)\dfrac{1}{n}$
+    \end{center}
+\end{mdframed}
+
+\2 The summation is the sum of all of the importance of node $I$ that point to it where $r_j$ and $r_i$ is the probability that the random surf is on this node.
+\2 This is divided by $d_i$, which is the probability that the random surf traverses the link when iterating towards $j$. This only happens with probability $\beta$, when the surfer decides to follow the link.
+\2 The $(1-\beta)/n$ represents when the random walkers decide to jump somewhere else, using the probability ($1-\beta) \cdot 1/n$, where $n$ is the number of nodes in the entire network.
+\end{outline}
 \end{frame}
 
-\begin{frame}[t]
-    \frametitle{Twitter}
-    \begin{outline}
-        \1 In 2010, Twitter was lagging behind and was lacking a user recommendation service. 
-        \1 This was perceived both externally and internally as a critical gap in Twitter’s product offerings, so quickly launching a high-quality product was a top priority.
-        \1 Twitter is unique because of the asymmetric nature of the following relationship—a user can receive messages from another without reciprocation. 
-        \1 This differs substantially from other social networks such as Facebook or LinkedIn, where social ties can only be established with the consent of both participating members.
-    \end{outline}
-\end{frame}
 
-\begin{frame}[t]
-    \frametitle{Introducing PageRank}
-    \begin{outline}
-        \1 This works well with PageRank because we can determine outbound and inbound links.
-        \1 A user $u$ is likely to follow those who are followed by users that are similar to $u$. 
-        \1 These users are in turn similar to $u$ if they follow the same (or similar) users.
-        \1 Therefore using Page Rank, Twitter is able to offer unique recommendations for users. 
-        \1 By analyzing who the user follows and who those users follow, the PageRank algorithm will allow Twitter to make specific recommendations for each user. 
-        \1 Essentially, the more outbound links that an account receives correlate to a higher PageRank score.        
-    \end{outline}
-\end{frame}
+%\section{Applications}
+%\begin{frame}[t]{Applications}
+%\begin{outline}
+%    \1 PageRank is perhaps the most famous search ranking algorithm. Googles high-quality search engine results are directly correlated to PageRank
+%    \1 There are a remarkable wide variety of applications of the PageRank algorithm that apply to non-search engine contexts.
+%    \1 Its simplicity and elegance allow PageRank to be a more general and powerful tool.
+%    \1 Let's look at the applications of PageRank and its connection to Twitter.
+%
+%\end{outline}
+%\end{frame}
+
+%\begin{frame}[t]
+%    \frametitle{Twitter}
+%    \begin{outline}
+%        \1 In 2010, Twitter was lagging behind and was lacking a user recommendation service. 
+%        \1 This was perceived both externally and internally as a critical gap in Twitter’s product offerings, so quickly launching a high-quality product was a top priority.
+%        \1 Twitter is unique because of the asymmetric nature of the following relationship—a user can receive messages from another without reciprocation. 
+%        \1 This differs substantially from other social networks such as Facebook or LinkedIn, where social ties can only be established with the consent of both participating members.
+%    \end{outline}
+%\end{frame}
+
+%\begin{frame}[t]
+%    \frametitle{Introducing PageRank}
+%    \begin{outline}
+%        \1 This works well with PageRank because we can determine outbound and inbound links.
+%        \1 A user $u$ is likely to follow those who are followed by users that are similar to $u$. 
+%        \1 These users are in turn similar to $u$ if they follow the same (or similar) users.
+%        \1 Therefore using Page Rank, Twitter is able to offer unique recommendations for users. 
+%        \1 By analyzing who the user follows and who those users follow, the PageRank algorithm will allow Twitter to make specific recommendations for each user. 
+%        \1 Essentially, the more outbound links that an account receives correlate to a higher PageRank score.        
+%    \end{outline}
+%\end{frame}
 
 \end{document}
