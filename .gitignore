@@ -2,6 +2,8 @@
 *
 
 # Exceptions
+!/images/
+!images/*
 !.gitignore
 !main.tex
 !main.pdf
