@@ -42,7 +42,34 @@
 \tableofcontents
 \end{frame}
 
-\section{Background}
+
+\section{Motivation \& History}
+\begin{frame}[t]
+\frametitle{Motivation}
+\begin{itemize}
+    \setlength\itemsep{0.5em}
+    \item Problem: the internet has a \emph{lot} of web pages
+    \item A lot of the information out there either isn't relevant to us, or is inaccurate
+    \item Motivation: we want a program that, when provided a phrase, returns webpages with information relevant to the input
+    \item Intuitive solution: return back websites that either contain that phrase, or contain similar phrases
+    \item This helps us find more \emph{relevant} pages, but we can't know if we're getting the best information (much less \emph{accurate} information) without manually going through each result
+    \item We desire a stronger solution
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
+\frametitle{PageRank}
+\begin{outline}
+    \1 Invented by Sergey Brin and Larry Page (1998)\footnotemark 
+        \2 Publication marks them becoming co-founders of Google  
+    \1 Idea: we want some way to numerically discern how important each webpage is
+    \1 PageRank: the procedure for scoring each website
+    \1 Google: the database that indexes the PageRank of each website for search
+    \1 Everytime Google crawls the web to reindex, it recalculates the PageRank scores for all webpages
+\end{outline}
+\footnotetext[1]{Many use the year of the original manuscript, 1996}
+\end{frame}
+
 \begin{frame}[t]{The Big Idea behind PageRank}
 \begin{outline}
     \1 PageRank is an algorithm to determine the importance of a website relatively to all other websites. The algorithm ranks the importance of website $w,$ i.e., PR($w$), based on the number of links points to website w and the \emph{quality} of each pointing link from the other source website. 
